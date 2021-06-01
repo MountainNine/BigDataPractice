@@ -1,4 +1,5 @@
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler
+from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 import numpy as np
 
