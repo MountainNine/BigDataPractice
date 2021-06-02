@@ -1,20 +1,22 @@
 from sklearn.preprocessing import OneHotEncoder, StandardScaler, LabelEncoder
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.decomposition import PCA
 from sklearn.metrics import roc_auc_score, accuracy_score
-import pandas as pd
 from xgboost import XGBClassifier
+import pandas as pd
 import numpy as np
 
 
 def pre_process(df):
     scaler = StandardScaler()
-    df[df.columns[~df.columns.isin(['주구매상품','주구매지점'])]] = scaler.fit_transform(df[df.columns[~df.columns.isin(['주구매상품','주구매지점'])]])
+    df[df.columns[~df.columns.isin(['주구매상품', '주구매지점'])]] = scaler.fit_transform(
+        df[df.columns[~df.columns.isin(['주구매상품', '주구매지점'])]])
     df = pd.get_dummies(df, columns=['주구매상품'])
     df = pd.get_dummies(df, columns=['주구매지점'])
     df = df.fillna(0)
     df = df.drop('cust_id', axis=1)
+
     return df
 
 
@@ -24,6 +26,11 @@ y = pd.read_csv("data/y_train.csv", encoding='euc-kr')
 
 x = pre_process(x)
 y = y.drop('cust_id', axis=1)
+
+# goods = x.loc[:,x.columns[7:49]]
+# store = x.loc[:,x.columns[49:]]
+# pca = PCA(n_components=20)
+# pca.fit(goods)
 # x_train = x[:3000]
 # x_test = x[3000:]
 # y_train = y[:3000]
@@ -33,7 +40,7 @@ y = y.drop('cust_id', axis=1)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=134)
 
-classifier = GradientBoostingClassifier()
+classifier = XGBClassifier()
 classifier.fit(x_train, y_train)
 
 pred = classifier.predict(x_test)
