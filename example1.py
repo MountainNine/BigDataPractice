@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
 
 def get_outlier(df, columns, weight=1.5):
     for column in columns:
@@ -14,3 +15,4 @@ def get_outlier(df, columns, weight=1.5):
         df.loc[df[column] < low, column] = low
         df.loc[df[column] > high, column] = high
     return df
+
