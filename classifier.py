@@ -52,6 +52,7 @@ classifier = XGBClassifier(learning_rate=0.01, n_jobs=-1, )
 classifier.fit(x_train, y_train)
 pred = classifier.predict_proba(x_test)
 result = pd.DataFrame(pred[:, 1])
+result.columns = ['gender_1']
 print(result)
 
 pred = classifier.predict(x_test)
