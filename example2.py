@@ -25,9 +25,11 @@ def get_outlier(df, columns, weight=1.5):
 def pre_processing(x):
     x = x.fillna(0)
     scaler = StandardScaler()
-    x[['총구매액', '최대구매액', '환불금액']] = np.log(x[['총구매액', '최대구매액', '환불금액']] + 1)
-    x = get_outlier(x, ['총구매액', '최대구매액', '환불금액'])
+    cols = ['총구매액', '최대구매액', '환불금액']
+    x[cols] = np.log(x[cols] + 1)
+    x = get_outlier(x, cols)
 
+    # x.loc[x['구매주기'] == 0,'구매주기'] = 13
     x[x.columns[~x.columns.isin(['주구매상품', '주구매지점'])]] = scaler.fit_transform(
         x[x.columns[~x.columns.isin(['주구매상품', '주구매지점'])]])
 
@@ -54,11 +56,12 @@ x = pre_processing(x_origin)
 # x_test = pre_processing(x_test)
 y = y.drop('cust_id', axis=1)
 
-x_train, x_test, y_train, y_test = train_test_split(x,y,test_size=0.2, random_state=123)
+x_train, x_test, y_train, y_test = train_test_split(x,y,test_size=0.2, random_state=134)
+
 params = {
     'learning_rate': [0.05]
 }
-classifier = XGBClassifier(learning_rate=0.03, max_depth=4, n_estimators=100)
+classifier = XGBClassifier(learning_rate=0.01, n_jobs=-1, )
 # grid = GridSearchCV(classifier, param_grid=params, n_jobs=-1, cv=3)
 # grid.fit(x_train, y_train)
 # print(grid.best_params_)

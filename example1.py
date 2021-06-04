@@ -2,6 +2,16 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
+# StandardScaler
+
+# MinMaxScaler
+
+# 혼동행렬
+
+# PCA 차원축소
+
+
+# 이상치 검출
 def get_outlier(df, columns, weight=1.5):
     for column in columns:
         col = df[column]
