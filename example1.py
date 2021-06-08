@@ -1,14 +1,29 @@
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
-
-# StandardScaler
+from sklearn.metrics import confusion_matrix
 
 # MinMaxScaler
+def convert_minmax(df):
+    scaler = MinMaxScaler()
+    df = scaler.fit_transform(df)
+    return df
+
+def convert_log1p(df):
+    return np.log1p(df)
 
 # 혼동행렬
 
+def confusion_matrix(real, pred):
+    cf = confusion_matrix(real, pred)
+    return cf
+
 # PCA 차원축소
+def get_pca_ratio(df, n):
+    from sklearn.decomposition import PCA
+    pca = PCA(n_component=n)
+    trans = pca.fit_transform(df)
+    return trans.explained_variance_ratio_
 
 
 # 이상치 검출
